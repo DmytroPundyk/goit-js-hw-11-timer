@@ -1,55 +1,63 @@
+const refs = {
+  days: document.querySelector('.value[data-value="days"]'),
+  hours: document.querySelector('.value[data-value="hours"]'),
+  mins: document.querySelector('.value[data-value="mins"]'),
+  secs: document.querySelector('.value[data-value="secs"]'),
+    timer: document.getElementById("timer-1"),
+};
+
 class CountdownTimer {
-  constructor({ selector, targetDate }) {
-    this.selector = document.querySelector(selector);
+
+    constructor({ targetDate, selector }) {
     this.targetDate = targetDate;
+        this.selector = selector;
+       
+    }
 
-    this.days = this.selector.querySelector('[data-value="days"]'); 
-    this.hours = this.selector.querySelector('[data-value="hours"]'); 
-    this.mins = this.selector.querySelector('[data-value="mins"]'); 
-    this.secs = this.selector.querySelector('[data-value="secs"]');
-    
-    this.id = null;
-  }
 
-  num(i) {
-  return String(i).padStart(2, 0);
-  }
-
-  getTimeComponents(time) {
-  const days = this.num(Math.floor(time / (1000 * 60 * 60 * 24)));
-  const hours = this.num(Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-  const mins = this.num(Math.floor((time % (1000 * 60 * 60)) / (1000 * 60)));
-  const secs = this.num(Math.floor((time % (1000 * 60)) / 1000));
-  return { days, hours, mins, secs };
-  }
-  
-  data(deltaTime){
-    const { days, hours, mins, secs } = this.getTimeComponents(deltaTime);
-    this.days.textContent = days;
-    this.hours.textContent = hours;
-    this.mins.textContent = mins;
-    this.secs.textContent = secs;
-  }
-
-  timeLeft() {
-    let  id = setInterval(() => {
-      const now = Date.now();
-      const deltaTime = this.targetDate - now;
-      this.data(deltaTime);
+    intervalId = setInterval(() => {
+        const currentTime = Date.now();
+        const deltaTime = this.targetDate - currentTime;
+        this.component(deltaTime);
+        this.timeFinish(deltaTime)
+        
     }, 1000);
+        
 
-    if (this.targetDate <= Date.now()) {
-      clearInterval(id);
-      this.days.textContent = '00';
-      this.hours.textContent = '00';
-      this.mins.textContent = '00';
-      this.secs.textContent = '00';
+    component(deltaTime) {
+    
+    const days = this.pad(Math.floor(deltaTime / (1000 * 60 * 60 * 24)));
+    
+    const hours = this.pad(Math.floor((deltaTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    
+    const mins = this.pad(Math.floor((deltaTime % (1000 * 60 * 60)) / (1000 * 60)));
+    
+    const secs = this.pad(Math.floor((deltaTime % (1000 * 60)) / 1000));
+    
+     refs.days.textContent = `${days}`;
+    refs.hours.textContent = `${hours}`;
+    refs.mins.textContent = `${mins}`;
+    refs.secs.textContent = `${secs}`;
+    }
+    
+
+    pad(value) {
+    return String(value).padStart(2, '0');    
+    }
+
+    timeFinish(deltaTime) {
+    if (deltaTime <= 0) {
+      clearInterval(this.intervalId);
+      refs.timer.textContent = "Yeeaaaah, New Year has Come!!!"
+      refs.timer.setAttribute("style", "font-size: 40px; color: red");
     }
   }
 }
 
-const timer = new CountdownTimer({
-  selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2022'),
-});;
-timer.timeLeft();
+ 
+new CountdownTimer({
+  selector: "#timer-1",
+  targetDate: new Date('Dec 31 ,2021'),
+});
+
+console.log(new Date())
