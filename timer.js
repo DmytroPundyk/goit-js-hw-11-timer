@@ -59,5 +59,5 @@ new CountdownTimer({
   selector: "#timer-1",
   targetDate: new Date('Jan 01 ,2022'),
 });
-
+//check textContext after clearinterval
 console.log(new Date())
