@@ -21,7 +21,7 @@ class CountdownTimer {
         this.component(deltaTime);
         this.timeFinish(deltaTime)
         
-    }, 1000);
+    }, 250);
         
 
     component(deltaTime) {
@@ -57,7 +57,7 @@ class CountdownTimer {
  
 new CountdownTimer({
   selector: "#timer-1",
-  targetDate: new Date('Dec 31 ,2021'),
+  targetDate: new Date('Jan 01 ,2022'),
 });
 
 console.log(new Date())
